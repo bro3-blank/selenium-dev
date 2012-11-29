@@ -1,7 +1,13 @@
 package m17.putei;
-import java.util.concurrent.TimeUnit;
+import java.io.File;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -15,45 +21,79 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
  * Seleniumを使ったログインテスト
  */
 public class Bro3Example {
-  //メールアドレスとパスワードはDオプションで指定。設定例：
-  //http://gyazo.com/e3ee52fb8bdf2206478da397fccbe174
+
+  //m17鯖以外にログインする場合はここを編集。
+  private final static int SERVER = 17;
+  private WebDriver d;
   
-  public static void main(String[] args) {
-//    WebDriver d = new FirefoxDriver();
-    WebDriver d = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6); 
+  /**
+   * WebDriver dを初期化するコンストラクタ
+   */
+  public Bro3Example() {
+    //重要でないエラーメッセージがたくさん表示されてしまうので、阻止。
+    Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF); 
+    Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
+    
+//  WebDriver d = new FirefoxDriver();
+    HtmlUnitDriver d = new HtmlUnitDriver(BrowserVersion.FIREFOX_10);
+    d.setJavascriptEnabled(true);
+    // クラス変数のdにローカル変数のdを代入。
+    this.d = d;
+  }
+  
+  /**
+   * Mixiにログインする
+   */
+  private void logInMixi( String mixiEmail, String mixiPassword ) {
     d.navigate().to("http://mixi.jp/run_appli.pl?id=6598");
     System.out.println("[1] 現在のページ名: " + d.getTitle());
     // ログインしてない状態なので、mixiトップが表示される。
     //メール欄にメールアドレス入力。
     WebElement input1 = d.findElement(By.name("email"));
-    input1.sendKeys( System.getProperty("mixi.email") );
+    input1.sendKeys( mixiEmail );
     //パスワード欄にメールアドレス入力。
     WebElement input2 = d.findElement(By.name("password"));
-    input2.sendKeys( System.getProperty("mixi.password") );
-    //seleniumが送信すべきフォームを探してくれるので、email.submit()でも結果は同じ。
+    input2.sendKeys( mixiPassword );
+    //seleniumが送信すべきフォームを探してくれるので、input1.submit()でも結果は同じ。
     input2.submit();
-    
     System.out.println("[2] 現在のページ名: " + d.getTitle());
-    
+  }
+  
+  /**
+   * ブラ三にログインする。
+   * @param serverNumber サーバID。17鯖の場合は17。
+   */
+  private void logInBro3( int serverNumber ) {
     //iframe内にフォーカスを移す
     d.switchTo().frame("app_content_6598");
 
-    System.out.println(d.getPageSource());
+    //System.out.println(d.getPageSource());
     
-    System.out.println("----");
-    
-    d.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     //鯖選択ボタンたちが現れるまで待つ。タイムアウトは30秒。
-//    (new WebDriverWait(d, 30)).until(new ExpectedCondition<Boolean>() {
-//      public Boolean apply(WebDriver d) {
-//          return d.findElement(By.xpath("//*[@id=\"serverList\"]/a[12]")).isDisplayed();
-//      }
-//    });
+    (new WebDriverWait(d, 30)).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver d) {
+        //鯖選択ボタンの下に出てくる【推奨ブラウザ】 のエレメントが表示されるまで待つ
+        return d.findElement(By.className("serverBrowser")).isDisplayed();
+      }
+    });
 
-    System.out.println(d.getPageSource());
+    /**
+     * 上のが動かなかったら以下を試してください。
+     */
+    //d.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    //Thread.sleep(30*1000);//30秒待つ
     
-    //鯖選択画面に行くので、17鯖ボタンをクリック！
-    d.findElement(By.xpath("//*[@id=\"serverList\"]/a[12]")).click();
+    //System.out.println(d.getPageSource());
+    
+    //鯖選択画面に行くので、指定された鯖ボタンをクリック！
+    List<WebElement> worldButtons = d.findElements(By.tagName("a"));
+    for ( WebElement wb : worldButtons ) {
+      String title = wb.getAttribute("title");
+      if ( title !=null && title.equals("m"+serverNumber+"ワールド") ) {
+        wb.click();
+        break;
+      }
+    }
     
     //さらに中のiframe内にフォーカスを移す
     d.switchTo().frame("mainframe");
@@ -62,15 +102,37 @@ public class Bro3Example {
     d.navigate().to("http://m17.3gokushi.jp/village.php");
 
     System.out.println("[3] 現在のページ名: " + d.getTitle());
-    
+  }
+  
+  private void doAction() throws Exception {
     String bp = d.findElement(By.id("bptpcp_area")).findElements(By.tagName("span")).get(0).getText();
     
     //現在のBPはおいくら？
     System.out.println("現在のBP: "+bp);
-    
-//    System.out.println("ページソース: "+d.getPageSource());
-    
+
+    //もしdがFirefoxDriverだったらスクリーンショットを撮って保存。
+    if (FirefoxDriver.class.isAssignableFrom(d.getClass())) {
+      File dir = new File("target");
+      if (!dir.exists()) dir.mkdirs(); 
+      File scrFile = ((TakesScreenshot)d).getScreenshotAs(OutputType.FILE);
+      FileUtils.copyFile(scrFile, new File(dir, "screenshot.png"));
+    }
+
+//  System.out.println("ページソース: "+d.getPageSource());
+  
     //FFを閉じる
 //    d.quit();
+  }
+  
+  public static void main(String[] args) throws Exception {
+    // メールアドレスとパスワードはDオプションで指定。設定例：
+    // http://gyazo.com/e3ee52fb8bdf2206478da397fccbe174
+    String mixiEmail = System.getProperty("mixi.email");
+    String mixiPassword = System.getProperty("mixi.password");
+    
+    Bro3Example bro3 = new Bro3Example(); 
+    bro3.logInMixi(mixiEmail, mixiPassword);
+    bro3.logInBro3(SERVER);
+    bro3.doAction();
   }
 }
