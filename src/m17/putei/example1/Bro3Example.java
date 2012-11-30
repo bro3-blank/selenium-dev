@@ -1,4 +1,4 @@
-package m17.putei;
+package m17.putei.example1;
 import java.io.File;
 import java.util.List;
 import java.util.logging.Level;
@@ -147,8 +147,7 @@ public class Bro3Example {
   }
   
   public static void main(String[] args) throws Exception {
-    // メールアドレスとパスワードはDオプションで指定。設定例：
-    // http://gyazo.com/e3ee52fb8bdf2206478da397fccbe174
+    //この場合、this.mixiEmail と mixiEmailは同じクラス変数をさします
     String mixiEmail = System.getProperty("mixi.email");
     String mixiPassword = System.getProperty("mixi.password");
     
