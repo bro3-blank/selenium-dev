@@ -27,7 +27,9 @@ public class Bro3Example {
 
   //m17鯖以外にログインする場合はここを編集。
   private final static int SERVER = 17;
-  //Firefoxで開くか
+
+  //true:Firefoxで開く、false:何も開かないで処理
+  //ぶらんくの環境ではなぜか前者30秒、後者60秒ぐらい。
   private final static boolean USE_FIREFOX = false; 
   
   private WebDriver d;
@@ -115,17 +117,16 @@ public class Bro3Example {
         break;
       }
     }
-    
+  }
+  
+  private void doAction() throws Exception {
     //さらに中のiframe内にフォーカスを移す
     d.switchTo().frame("mainframe");
-
     //本拠地画面へ
     d.navigate().to("http://m17.3gokushi.jp/village.php");
 
     System.out.println("[3] 現在のページ名: " + d.getTitle());
-  }
-  
-  private void doAction() throws Exception {
+    
     String bp = d.findElement(By.id("bptpcp_area")).findElements(By.tagName("span")).get(0).getText();
     
     //現在のBPはおいくら？
@@ -151,15 +152,19 @@ public class Bro3Example {
     String mixiEmail = System.getProperty("mixi.email");
     String mixiPassword = System.getProperty("mixi.password");
     
+    //パスワードちゃんと入ってるかチェック
     if (mixiEmail==null || mixiEmail.length()==0 || 
             mixiPassword==null || mixiPassword.length()==0 ) {
       System.err.println("メールアドレスとパスワードをDオプションで指定してください。\n例： http://gyazo.com/e3ee52fb8bdf2206478da397fccbe174");
       System.exit(-1);
     }
     
+    long t0 = System.currentTimeMillis();
     Bro3Example bro3 = new Bro3Example(); 
     bro3.logInMixi(mixiEmail, mixiPassword);
     bro3.logInBro3(SERVER);
     bro3.doAction();
+    long t1 = System.currentTimeMillis();
+    System.out.println((double)(t1-t0)/(double)1000+" 秒で全処理を終えました。");
   }
 }
