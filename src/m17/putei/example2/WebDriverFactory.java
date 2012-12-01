@@ -11,6 +11,9 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 
 /**
  * ウェブドライバ作成に特化したクラス
+ * 
+ * UserAgent一覧も参考になるかも。
+ * http://www.openspc2.org/userAgent/
  */
 public class WebDriverFactory {
 
@@ -20,7 +23,7 @@ public class WebDriverFactory {
    * @return　web driver
    */
   public static WebDriver createDriver( boolean useFF ) {
-    long t0 = System.currentTimeMillis();
+    StopWatch sw = new StopWatch();
     //重要でないエラーメッセージがたくさん表示されてしまうので、阻止。
     Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF); 
     Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
@@ -36,8 +39,8 @@ public class WebDriverFactory {
               1.2f );
       HtmlUnitDriver d = new HtmlUnitDriver(bv);
       d.setJavascriptEnabled(true);
-      long t1 = System.currentTimeMillis();
-      System.out.println("本拠地画面を開きました ["+(double)(t1-t0)/(double)1000+"秒]");
+
+      sw.stop("ウェブドライバを初期化しました");
       return d;
     }
   }

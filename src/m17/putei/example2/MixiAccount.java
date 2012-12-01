@@ -1,7 +1,7 @@
 package m17.putei.example2;
 
 /**
- * Mixiのアカウント情報を保持するクラス
+ * Mixiアカウント情報のデータクラス
  */
 public class MixiAccount {
 
@@ -9,25 +9,14 @@ public class MixiAccount {
   //オブジェクト指向プログラミングでは「カプセル化」といいます。
   private String mixiEmail;
   private String mixiPassword;
-  
-  /**
-   * 引数が与えられた時はその値で初期化
-   * @param mixiEmail
-   * @param mixiPassword
-   */
-  public MixiAccount( String mixiEmail, String mixiPassword ) {
-    //ローカル変数をクラス変数に代入
-    this.mixiEmail = mixiEmail;
-    this.mixiPassword = mixiPassword;
-  }
-  
+
   /**
    * 引数が与えられなかった時はシステムプロパティで初期化
    * メールアドレスとパスワードは-Dオプションで指定。設定例：
    * http://gyazo.com/e3ee52fb8bdf2206478da397fccbe174
    */
   public MixiAccount() {
-    //この場合、this.mixiEmail と mixiEmailは同じクラス変数をさします
+    //this.mixiEmail でも mixiEmailでも同じ
     mixiEmail = System.getProperty("mixi.email");
     mixiPassword = System.getProperty("mixi.password");
     
@@ -39,6 +28,17 @@ public class MixiAccount {
     }
   }
 
+  /**
+   * 引数が与えられた時はその値で初期化
+   * @param mixiEmail
+   * @param mixiPassword
+   */
+  public MixiAccount( String mixiEmail, String mixiPassword ) {
+    //ローカル変数をインスタンス変数に代入
+    this.mixiEmail = mixiEmail;
+    this.mixiPassword = mixiPassword;
+  }
+  
   //Getterメソッド
   public String getMixiEmail() {
     return mixiEmail;

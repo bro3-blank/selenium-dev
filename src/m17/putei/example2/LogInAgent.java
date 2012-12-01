@@ -17,15 +17,15 @@ public class LogInAgent {
    * Mixiにログインする
    */
   public static void logInMixi( WebDriver d, MixiAccount account ) {
-    long t0 = System.currentTimeMillis();
+    StopWatch sw1 = new StopWatch();
     try {
       d.navigate().to("http://mixi.jp/run_appli.pl?id=6598");
     } catch (WebDriverException e) {
       //Javascript実行エラーが出るときがあるが、無視
     }
-    long t1 = System.currentTimeMillis();
-    System.out.println("Mixiトップページを開きました ["+(double)(t1-t0)/(double)1000+"秒]");
+    sw1.stop("Mixiトップページを開きました");
     
+    StopWatch sw2 = new StopWatch();
     // ログインしてない状態なので、mixiトップが表示される。
     //メール欄にメールアドレス入力。
     WebElement input1 = d.findElement(By.name("email"));
@@ -39,8 +39,7 @@ public class LogInAgent {
     } catch (ScriptException e) {
       //Javascript実行エラーが出るときがあるが、無視
     }
-    long t2 = System.currentTimeMillis();
-    System.out.println("Mixiにログインしました ["+(double)(t2-t1)/(double)1000+"秒]");
+    sw2.stop("Mixiにログインしました");
   }
   
   /**
@@ -48,7 +47,7 @@ public class LogInAgent {
    * @param serverNumber サーバID。17鯖の場合は17。
    */
   public static void selectBro3Server( WebDriver d, int serverNumber ) {
-    long t0 = System.currentTimeMillis();
+    StopWatch sw = new StopWatch();
     //iframe内にフォーカスを移す
     d.switchTo().frame("app_content_6598");
 
@@ -59,8 +58,7 @@ public class LogInAgent {
         return d.findElement(By.className("serverBrowser")).isDisplayed();
       }
     });
-    long t1 = System.currentTimeMillis();
-    System.out.println("ブラ三サーバ選択画面を開きました ["+(double)(t1-t0)/(double)1000+"秒]");
+    sw.stop("ブラ三サーバ選択画面を開きました");
 
     /**
      * 上のが動かなかったら以下を試してください。
