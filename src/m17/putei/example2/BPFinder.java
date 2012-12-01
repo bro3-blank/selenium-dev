@@ -8,7 +8,7 @@ public class BPFinder {
   public static int getBP( WebDriver d ) throws Exception {
     StopWatch sw1 = new StopWatch();
     d.switchTo().frame("mainframe"); //さらに中のiframe内にフォーカスを移す
-    d.navigate().to("http://m17.3gokushi.jp/village.php"); //本拠地画面へ
+    d.navigate().to("http://m"+CommonSettings.SERVER+".3gokushi.jp/village.php"); //本拠地画面へ
     sw1.stop("本拠地画面を開きました");
     
     StopWatch sw2 = new StopWatch();
