@@ -10,8 +10,8 @@ public class CommonFlow {
    * 
    * @return web driver
    */
-  public static WebDriver getBro3WebDriver() {
-    WebDriver d = WebDriverFactory.createDriver(CommonSettings.USE_FIREFOX);
+  public static WebDriver getBro3WebDriver(boolean useFF) {
+    WebDriver d = WebDriverFactory.createDriver(useFF);
     MixiAccount mixiAccount = new MixiAccount();
     LogInAgent.logInMixi(d, mixiAccount);
     LogInAgent.selectBro3Server(d, CommonSettings.SERVER);

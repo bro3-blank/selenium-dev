@@ -10,7 +10,7 @@ public class Bro3MapDemo {
   public static void main(String[] args) throws Exception {
 
     StopWatch sw = new StopWatch();
-    WebDriver d = CommonFlow.getBro3WebDriver();
+    WebDriver d = CommonFlow.getBro3WebDriver(CommonSettings.USE_FIREFOX);
 
     //読み込むマップの中心座標を複数指定
     String[] xyPairs = {"3,-27", 

@@ -28,8 +28,9 @@ public class WebDriverFactory {
     Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF); 
     Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
     
+    WebDriver d;
     if ( useFF ) {
-      return new FirefoxDriver();
+      d = new FirefoxDriver();
     } else { 
       // FFの窓を開かず実行
       //mixiがボットをはじくようになっているのでUserAgentを偽装
@@ -37,11 +38,11 @@ public class WebDriverFactory {
               "Netscape", 
               "5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.56 Safari/536.5", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.56 Safari/536.5", 
               1.2f );
-      HtmlUnitDriver d = new HtmlUnitDriver(bv);
-      d.setJavascriptEnabled(true);
-
-      sw.stop("ウェブドライバを初期化しました");
-      return d;
+      HtmlUnitDriver hud = new HtmlUnitDriver(bv);
+      hud.setJavascriptEnabled(true);
+      d = hud;
     }
+    sw.stop("ウェブドライバを初期化しました");
+    return d;
   }
 }

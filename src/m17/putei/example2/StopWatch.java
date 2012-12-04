@@ -3,7 +3,7 @@ package m17.putei.example2;
 public class StopWatch {
 
   //static変数はグローバル変数のようなもので、オブジェクト間で共有されます。
-  public static boolean PRINT_LOG = false;
+  public static boolean PRINT_LOG = true;
   
   private long begin;
   
