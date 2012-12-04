@@ -17,6 +17,14 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
  */
 public class WebDriverFactory {
 
+  static {
+    //重要でないエラーメッセージがたくさん表示されてしまうので、阻止。
+    Logger logger1 = Logger.getLogger("com.gargoylesoftware"); 
+    logger1.setLevel(Level.OFF);
+    Logger logger2 = Logger.getLogger("org.apache.commons.httpclient"); 
+    logger2.setLevel(Level.OFF);
+  }
+  
   /**
    * ウェブドライバを生成するメソッド
    * @param useFF　Firefoxを開くか、ウィンドウを開かずに処理するか。
@@ -24,10 +32,6 @@ public class WebDriverFactory {
    */
   public static WebDriver createDriver( boolean useFF ) {
     StopWatch sw = new StopWatch();
-    //重要でないエラーメッセージがたくさん表示されてしまうので、阻止。
-    Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF); 
-    Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
-    
     WebDriver d;
     if ( useFF ) {
       d = new FirefoxDriver();
