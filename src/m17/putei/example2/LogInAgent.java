@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -50,14 +51,31 @@ public class LogInAgent {
     StopWatch sw = new StopWatch();
     //iframe内にフォーカスを移す
     d.switchTo().frame("app_content_6598");
+    
+    if (HtmlUnitDriver.class.isAssignableFrom(d.getClass())) {
+      //鯖選択ボタンたちが現れるまで待つ。タイムアウトは30秒。
+      //この部分がFFでうまく動かなかったのは、FFのバージョンに違いによるよう。
+      //https://groups.google.com/forum/?fromgroups=#!topic/selenium-users/ZwMtc3j4jO0
 
-    //鯖選択ボタンたちが現れるまで待つ。タイムアウトは30秒。
-    (new WebDriverWait(d, 30)).until(new ExpectedCondition<Boolean>() {
-      public Boolean apply(WebDriver d) {
-        //鯖選択ボタンの下に出てくる【推奨ブラウザ】 のエレメントが表示されるまで待つ
-        return d.findElement(By.className("serverBrowser")).isDisplayed();
+      (new WebDriverWait(d, 30)).until(new ExpectedCondition<Boolean>() {
+        public Boolean apply(WebDriver d) {
+          //鯖選択ボタンの下に出てくる【推奨ブラウザ】 のエレメントが表示されるまで待つ
+//          return d.findElement(By.className("serverBrowser")).isDisplayed();
+          return d.getPageSource().indexOf("ロード中")==-1;
+        }
+      });
+    } else {
+      //FFなど本物のブラウザを操作する場合
+      try {
+  //      FileUtils.writeStringToFile(new File("a1.html"), d.getPageSource());
+  //      System.out.println("start waiting");
+        Thread.sleep(15*1000);
+  //      FileUtils.writeStringToFile(new File("a2.html"), d.getPageSource());
+  //      System.out.println("end waiting");
+      } catch (Exception e) {
+        e.printStackTrace();
       }
-    });
+    }
     sw.stop("ブラ三サーバ選択画面を開きました");
 
     /**
@@ -65,8 +83,6 @@ public class LogInAgent {
      */
     //d.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     //Thread.sleep(30*1000);//30秒待つ
-    
-    //System.out.println(d.getPageSource());
     
     //鯖選択画面に行くので、指定された鯖ボタンをクリック！
     List<WebElement> worldButtons = d.findElements(By.tagName("a"));
