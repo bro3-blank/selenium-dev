@@ -69,7 +69,7 @@ public class LogInAgent {
       try {
   //      FileUtils.writeStringToFile(new File("a1.html"), d.getPageSource());
   //      System.out.println("start waiting");
-        Thread.sleep(15*1000);
+        Thread.sleep(20*1000);
   //      FileUtils.writeStringToFile(new File("a2.html"), d.getPageSource());
   //      System.out.println("end waiting");
       } catch (Exception e) {
