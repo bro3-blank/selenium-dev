@@ -1,5 +1,7 @@
 package m17.putei.example2;
 
+import java.io.File;
+
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -52,6 +54,14 @@ public class Bro3MapDemo {
         }
       }
     }
+    
+    //MapDataCollectionをディスクに保存、圧縮
+    IOUtil<MapDataCollection> ioutil = new IOUtil<MapDataCollection>();
+    ioutil.saveZippedData(map, new File("target/map.zip"));
+    
+    //圧縮したMapDataCollectionデータをディスクから読み込み
+    MapDataCollection map2 = ioutil.loadZippedData(new File("target/map.zip"));
+    
     
     System.out.println("----------- 全処理終了 -----------");
     sw.stop("累計処理時間");
