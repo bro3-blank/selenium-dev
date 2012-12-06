@@ -22,9 +22,16 @@ public class CommonFlow {
    */
   public static WebDriver getBro3WebDriver(boolean useFF, String mixiEmail, String mixiPassword) {
     MixiAccount mixiAccount = new MixiAccount(mixiEmail, mixiPassword);
+    return getBro3WebDriver( useFF, mixiAccount.getMixiEmail(), mixiAccount.getMixiPassword(), 
+            CommonSettings.SERVER );
+  }
+  
+  public static WebDriver getBro3WebDriver(boolean useFF, 
+          String mixiEmail, String mixiPassword, int server) {
+    MixiAccount mixiAccount = new MixiAccount(mixiEmail, mixiPassword);
     WebDriver d = WebDriverFactory.createDriver(useFF);
     LogInAgent.logInMixi(d, mixiAccount);
-    LogInAgent.selectBro3Server(d, CommonSettings.SERVER);
+    LogInAgent.selectBro3Server(d, server);
     d.switchTo().frame("mainframe"); // さらに中のiframe内にフォーカスを移す
     return d;
   }

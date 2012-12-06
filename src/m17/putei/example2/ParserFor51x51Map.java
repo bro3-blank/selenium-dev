@@ -82,12 +82,10 @@ public class ParserFor51x51Map {
       if (!line.trim().endsWith("</li>")) {
         continue;
       }
-      int internalId = 0;
       String rawMapInfo = sbRawMapInfo.toString();
       sbRawMapInfo = new StringBuilder();
       String cssClass = extractTextByPatternMatch(pClass, rawMapInfo);
       if (cssClass.indexOf("bg_out_of_map")!=-1) continue;
-      internalId++;
       int x = Integer.parseInt( extractTextByPatternMatch(pX, rawMapInfo) );
       int y = Integer.parseInt( extractTextByPatternMatch(pY, rawMapInfo) );
       String player = extractTextByPatternMatch(pPlayer, rawMapInfo);

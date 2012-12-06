@@ -54,6 +54,10 @@ public class Bro3MapDemo {
         }
       }
     }
+    System.out.println("----------- 全処理終了 -----------");
+    sw.stop("累計処理時間");
+    
+    //おまけ
     
     //MapDataCollectionをディスクに保存、圧縮
     IOUtil<MapDataCollection> ioutil = new IOUtil<MapDataCollection>();
@@ -62,8 +66,5 @@ public class Bro3MapDemo {
     //圧縮したMapDataCollectionデータをディスクから読み込み
     MapDataCollection map2 = ioutil.loadZippedData(new File("target/map.zip"));
     
-    
-    System.out.println("----------- 全処理終了 -----------");
-    sw.stop("累計処理時間");
   }
 }
