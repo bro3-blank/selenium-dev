@@ -19,9 +19,10 @@ public class EnseiSheetAnalyzer {
   
   public void run() throws Exception {
     //各ファイルは各遠征シートに対応
-    //必ずテキスト形式（タブ区切り）でエクスポートすること
+    //テキスト形式（タブ区切り）でエクスポートすること
     //http://gyazo.com/71551f7fa04c2d8c719a5210621a4dee
     //コピペだと大きいシートは仕様上一部しか情報取得できません
+    //TODO: リアルタイムにシート情報を取れるとイイネ！きっとぷりさんか鯛さんあたりが移植したコードでやってくれるはず。。。？！
     for ( File f : dir.listFiles()) {
       List<String> lines = FileUtils.readLines(f);
       int numRegistered = 0;
@@ -34,7 +35,7 @@ public class EnseiSheetAnalyzer {
         //もしもこの行が領地情報だったら...
         if ( cells.length>2 && isNumber(cells[0]) && isNumber(cells[1]) ) {
           numRegistered++;
-          String player = cells[4];
+          String player = cells[4].replaceAll(" ", "");//誤入力の空白除去
           //もしも取得／予約済みだったら...
           if (player.length()>0) {
             numObtained++;
