@@ -14,7 +14,7 @@ public class Screenshotter {
     StopWatch sw1 = new StopWatch();
 //    d.switchTo().frame("mainframe"); //さらに中のiframe内にフォーカスを移す
     String url = "http://m"+CommonSettings.SERVER+".3gokushi.jp/map.php?x="+x+"&y="+y+"&type="+type;
-    d.navigate().to(url); //地図画面
+    d.get(url); //地図画面
     sw1.stop("地図画面を開きました");
     
     if (FirefoxDriver.class.isAssignableFrom(d.getClass())) {

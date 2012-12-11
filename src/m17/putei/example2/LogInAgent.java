@@ -50,8 +50,16 @@ public class LogInAgent {
   public static void selectBro3Server( WebDriver d, int serverNumber ) {
     StopWatch sw = new StopWatch();
     //iframe内にフォーカスを移す
+    try {
+      //rare bug without this sleep
+      Thread.sleep(10*1000);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     d.switchTo().frame("app_content_6598");
-    
+    if (d.getCurrentUrl().equals("about:blank")) {
+      System.out.println(d.getPageSource());
+    }
     if (HtmlUnitDriver.class.isAssignableFrom(d.getClass())) {
       //鯖選択ボタンたちが現れるまで待つ。タイムアウトは30秒。
       //この部分がFFでうまく動かなかったのは、FFのバージョンに違いによるよう。
@@ -87,6 +95,7 @@ public class LogInAgent {
     //鯖選択画面に行くので、指定された鯖ボタンをクリック！
     List<WebElement> worldButtons = d.findElements(By.tagName("a"));
     for ( WebElement wb : worldButtons ) {
+//      System.out.println(wb.getAttribute("title"));
       String title = wb.getAttribute("title");
       if ( title !=null && title.equals("m"+serverNumber+"ワールド") ) {
         wb.click();

@@ -26,23 +26,31 @@ public class Bro3Screenshot extends TimerTask {
       System.err.println("Example2: bro3-ss.jar example@gmail.com 4429 (0,0) (77,-175) (88,-88)");
       System.exit(-1);
     }
-    System.out.println("---- "+Calendar.getInstance().getTime()+" ----");
+    System.out.println("\n\n---- "+Calendar.getInstance().getTime()+" ----");
     
     StopWatch swAll = new StopWatch();
-    int serverId = -1;
     boolean serverIdSpecified = false;
     try {
-      serverId = Integer.parseInt(args[2]);
+      CommonSettings.SERVER = Integer.parseInt(args[2]);
       serverIdSpecified = true;
     } catch (NumberFormatException e) {
-      // もしサーバIDが与えられなかったら、デフォル(１７鯖)を使う。
-      serverId = CommonSettings.SERVER;
+      // もしサーバIDが与えられなかったら、デフォルト(１７鯖)を使う。
     }
-    WebDriver d = CommonFlow.getBro3WebDriver(true, args[0], args[1], serverId);
-    StopWatch sw1 = new StopWatch();
+    WebDriver d = CommonFlow.getBro3WebDriver(true, args[0], args[1]);
+//    System.out.println(d.getPageSource());
+//    StopWatch sw1 = new StopWatch();
 //    d.switchTo().frame("mainframe"); //さらに中のiframe内にフォーカスを移す
-    d.navigate().to("http://m"+CommonSettings.SERVER+".3gokushi.jp/village.php"); //本拠地画面へ
-    sw1.stop("本拠地画面を開きました");
+//    d.navigate().to("http://m"+CommonSettings.SERVER+".3gokushi.jp/village.php"); //本拠地画面へ
+//    d.get("http://m1.3gokushi.jp/map.php?x=0&y=0&type=4");
+//    sw1.stop("本拠地画面を開きました");
+
+//    try {
+//      System.out.println("started");
+//      Thread.sleep(10*1000);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+    
     Pattern pZahyo = Pattern.compile("\\(([0-9-]+?),([0-9-]+?)\\)");
     for ( int i=(serverIdSpecified ? 3 : 2); i<args.length; i++ ) {
       Matcher m = pZahyo.matcher(args[i]);
@@ -54,7 +62,12 @@ public class Bro3Screenshot extends TimerTask {
         }
       }
     }
-    d.close();
+    try {
+      d.close();
+    } catch (Exception e) {
+      //org.openqa.selenium.WebDriverException: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [xpcIJSWeakReference.get]
+      e.printStackTrace();
+    }
     System.out.println("----------- 全処理終了 -----------");
     swAll.stop("累計処理時間");
   }
