@@ -28,6 +28,7 @@ public class Bro3MapMultiDemo {
   
   public static void main(String[] args) throws Exception {
     StopWatch sw = new StopWatch();    
+    System.out.println("Output file:"+outputFile.getAbsolutePath());
     // 読み込むマップの中心座標を複数指定
     // 上位配列の長さ分スレッドが増える
     //(-575,-575), (-575,-524), (-575,-473), ...
