@@ -100,10 +100,8 @@ public class FileDownloader {
   }
   
   public static String getContentFromUrlSlow(WebDriver d, String url) {
-    StopWatch sw = new StopWatch();
     d.navigate().to(url);
     String content = d.getPageSource();
-    sw.stop("ページを開きました。URL="+url);
     return content;
   }
 

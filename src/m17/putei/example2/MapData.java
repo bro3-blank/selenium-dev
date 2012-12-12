@@ -19,10 +19,10 @@ public class MapData implements Serializable {
   private boolean isKyoten; //kyoten or honkyochi
   private boolean isHaika; //is capital and haika
   private int level;
-//  private byte wood;
-//  private byte stone;
-//  private byte iron;
-//  private byte rice;
+  private byte wood;
+  private byte stone;
+  private byte iron;
+  private byte rice;
   
   private Dictionary dict;
 
@@ -97,36 +97,36 @@ public class MapData implements Serializable {
     this.level = level;
   }
 
-//  public void setWood(byte wood) {
-//    this.wood = wood;
-//  }
-//
-//  public void setStone(byte stone) {
-//    this.stone = stone;
-//  }
-//
-//  public void setIron(byte iron) {
-//    this.iron = iron;
-//  }
-//
-//  public void setRice(byte rice) {
-//    this.rice = rice;
-//  }
-//
-//  public byte getWood() {
-//    return wood;
-//  }
-//
-//  public byte getStone() {
-//    return stone;
-//  }
-//
-//  public byte getIron() {
-//    return iron;
-//  }
-//
-//  public byte getRice() {
-//    return rice;
-//  }
+  public void setWood(byte wood) {
+    this.wood = wood;
+  }
+
+  public void setStone(byte stone) {
+    this.stone = stone;
+  }
+
+  public void setIron(byte iron) {
+    this.iron = iron;
+  }
+
+  public void setRice(byte rice) {
+    this.rice = rice;
+  }
+
+  public byte getWood() {
+    return wood;
+  }
+
+  public byte getStone() {
+    return stone;
+  }
+
+  public byte getIron() {
+    return iron;
+  }
+
+  public byte getRice() {
+    return rice;
+  }
 
 }

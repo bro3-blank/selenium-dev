@@ -10,6 +10,6 @@ public class Bro3Example {
     WebDriver d = CommonFlow.getBro3WebDriver(CommonSettings.USE_FIREFOX);
     BPFinder.getBP(d);
     System.out.println("----------- 全処理終了 -----------");
-    sw.stop("累計処理時間");
+    sw.stop("合計計処理時間");
   }
 }

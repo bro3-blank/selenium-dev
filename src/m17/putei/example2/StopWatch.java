@@ -15,7 +15,7 @@ public class StopWatch {
     if ( PRINT_LOG ) {
       double time = (double)(System.currentTimeMillis() - begin) / (double)1000;
       String t = "["+String.format("%7.3f",time)+" 秒]";
-      System.out.println("> "+t+" "+message);
+      System.out.println(t+" "+message);
     }
   }
   

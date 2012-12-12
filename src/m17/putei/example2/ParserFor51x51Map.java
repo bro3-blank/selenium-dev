@@ -35,10 +35,9 @@ public class ParserFor51x51Map {
   private static Pattern pLevel = Pattern.compile("戦力(?:<|&lt;)/dt(?:>|&gt;)(?:<|&lt;)dd(?:>|&gt;)([☆★]+)(?:<|&lt;)");
   private static Pattern pType = Pattern.compile(">\\s*([^\\s]+?)\\s*</a>", Pattern.DOTALL);
   private static Pattern pClass = Pattern.compile("<li class=\"(.+?)\">");
+  private static Pattern pShigen = Pattern.compile("(?:>|&gt;)資源(?:<|&lt;)/dt(?:>|&gt;)(?:<|&lt;)dd class=&quot;bottom-popup-r&quot;(?:>|&gt;)" +
+          "木([0-9]+)&amp;nbsp;岩([0-9]+)&amp;nbsp;鉄([0-9]+)&amp;nbsp;糧([0-9]+)(?:<|&lt;)");
   
-//  private static Pattern pShigen = Pattern.compile("&gt;資源&lt;/dt&gt;&lt;dd class=&quot;bottom-popup-r&quot;&gt;" +
-//  		"木([0-9]+)&amp;nbsp;岩([0-9]+)&amp;nbsp;鉄([0-9]+)&amp;nbsp;糧([0-9]+)&lt;");
-
 //  <tr>
 //  <th class="rank">ランク</th>
 //  <th class="loadName">同盟略称</th>
@@ -68,7 +67,7 @@ public class ParserFor51x51Map {
    * @param srcOf51x51Map
    */
   public static void loadRawHtml(MapDataCollection map, String srcOf51x51Map) {
-    StopWatch sw = new StopWatch();
+//    StopWatch sw = new StopWatch();
     Set<String> history = new HashSet<String>();
       
     String[] lines = srcOf51x51Map.split("\n");
@@ -88,6 +87,7 @@ public class ParserFor51x51Map {
       if (cssClass.indexOf("bg_out_of_map")!=-1) continue;
       int x = Integer.parseInt( extractTextByPatternMatch(pX, rawMapInfo) );
       int y = Integer.parseInt( extractTextByPatternMatch(pY, rawMapInfo) );
+      history.add(x+","+y);
       String player = extractTextByPatternMatch(pPlayer, rawMapInfo);
       String alliance = extractTextByPatternMatch(pAlliance, rawMapInfo);
       String textLevel = extractTextByPatternMatch(pLevel, rawMapInfo);
@@ -101,13 +101,22 @@ public class ParserFor51x51Map {
       boolean isCapital = !isNPC && type.equals("城");
       boolean isKyoten = (!isNPC && type.equals("砦")) || type.equals("村");
       boolean isHaika = cssClass.indexOf("bg_junior_alliance")!=-1 || cssClass.indexOf("bg_enemy_junior_alliance")!=-1;
-      
-      history.add(x+","+y);
-      if (player==null) continue; 
+
+      Matcher mShigen = pShigen.matcher(rawMapInfo);
+      byte wood = -1, stone = -1, iron = -1, rice = -1;
+      if (mShigen.find()) {
+        wood  = Byte.parseByte(mShigen.group(1));
+        stone = Byte.parseByte(mShigen.group(2));
+        iron  = Byte.parseByte(mShigen.group(3));
+        rice  = Byte.parseByte(mShigen.group(4));
+      }
+      //もしデータサイズ削減のため空地は無視する場合：
+      //if (player==null) continue;
       map.register( x, y, player, alliance, level, 
-              isNPC, isCapital, isKyoten, isHaika);
+              isNPC, isCapital, isKyoten, isHaika,
+              wood, stone, iron, rice);
     }
-    sw.stop(history.size()+"マスの領地データを抽出しました");
+//    sw.stop(history.size()+"マスの領地データを抽出しました");
   }
   
 }

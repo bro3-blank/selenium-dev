@@ -69,7 +69,7 @@ public class Bro3Screenshot extends TimerTask {
       e.printStackTrace();
     }
     System.out.println("----------- 全処理終了 -----------");
-    swAll.stop("累計処理時間");
+    swAll.stop("合計処理時間");
   }
   
   public static void main(String[] args) throws Exception {

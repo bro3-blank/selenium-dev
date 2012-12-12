@@ -55,7 +55,7 @@ public class Bro3MapDemo {
       }
     }
     System.out.println("----------- 全処理終了 -----------");
-    sw.stop("累計処理時間");
+    sw.stop("合計処理時間");
     
     //おまけ
     
