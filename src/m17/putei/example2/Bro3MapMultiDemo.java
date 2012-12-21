@@ -1,6 +1,7 @@
 package m17.putei.example2;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -22,7 +23,7 @@ public class Bro3MapMultiDemo {
   private static final int SIZE = 51;
   private static final int OFFSET = 600-25;
   
-  private static int numThread = 8;
+  private static int numThread = 6;
   private static int threadLife = 2*60*60;//スレッドの寿命(秒)
   private static File outputFile = new File("map-"+Util.getTimestamp()+".csv");
   
@@ -92,7 +93,7 @@ class Bro3MapDemoThread implements Runnable {
         String srcOf51x51Map = FileDownloader.getContentFromUrlSlow(d, mapURL);
         MapDataCollection map = new MapDataCollection();//declare here to save memory space
         ParserFor51x51Map.loadRawHtml(map, srcOf51x51Map);
-        FileUtils.write(f, map.toCSV(), true);//append csv content to file
+        FileUtils.write(f, map.toCSV(), "utf-8", true);//append csv content to file
         sw.stop("スレッドID="+threadNumber+"が ("+x+","+y+") 中心の51×51マップから領地情報を取得しました。　("+(++counter)+"/"+xyPairs.size()+")");
       } catch (Exception e) {
         e.printStackTrace();

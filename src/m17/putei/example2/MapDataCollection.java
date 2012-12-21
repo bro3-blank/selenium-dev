@@ -38,13 +38,13 @@ public class MapDataCollection implements Serializable {
   private int getCoordId(int x, int y) {
     int posX = x + HANKEI;
     int posY = y + HANKEI;
-    int xy = posX + CHOKKEI * posY;
+    int xy = posX + (CHOKKEI * posY);
     return xy; 
   }
 
   private int[] getCoord(int xy) {
-    int x = xy / CHOKKEI - HANKEI;
-    int y = xy % CHOKKEI - HANKEI;
+    int x = xy % CHOKKEI - HANKEI;
+    int y = xy / CHOKKEI - HANKEI;
     return new int[]{ x, y };
   }
   
